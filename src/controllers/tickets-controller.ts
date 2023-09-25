@@ -9,3 +9,13 @@ export async function GetAllTypesTickets(req: AuthenticatedRequest, res: Respons
 
     return res.status(httpStatus.OK).send(typeAlltickets);
 }
+
+export async function getTicketsByuser(req: AuthenticatedRequest, res: Response) {
+    const { userId } = req;
+
+    const ticketbyuser = await ticketsservice.GetAllbyid(userId);
+
+    
+
+    return res.status(httpStatus.OK).send(ticketbyuser);
+}

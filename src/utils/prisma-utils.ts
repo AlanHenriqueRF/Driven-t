@@ -5,3 +5,5 @@ export function exclude<T, Key extends keyof T>(entity: T, ...keys: Key[]): Omit
   }
   return newEntity;
 }
+
+export type Include<T, U> = Omit<T, keyof U> & U;
