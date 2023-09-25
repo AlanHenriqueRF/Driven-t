@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { requestError } from '@/errors';
 
-async function get(url: string){
+async function get(url: string) {
   try {
     const result = await axios.get(url);
     return result;
