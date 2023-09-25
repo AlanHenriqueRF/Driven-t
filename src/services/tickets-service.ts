@@ -29,11 +29,11 @@ async function postTicket(ticketTypeId:number,userId:number){
 
     const Ticket = {
         ticketTypeId,
-        enrollmentId:userId,
+        enrollmentId:checkEnrrolment.id,
         status: TicketStatus.RESERVED,
         updatedAt: (new Date()).toISOString()
     }
-
+    console.log(Ticket.enrollmentId,typeof(Ticket.enrollmentId))
     await ticketsRepository.postTicket(Ticket);
     return await ticketsRepository.GetAllbyid(userId);
 }
