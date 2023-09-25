@@ -1,14 +1,15 @@
 import { prisma } from '@/config';
+import { TicketStatus } from '@prisma/client';
 
 async function GetAllTypesTickets() {
   return prisma.ticketType.findMany();
 }
 
-async function GetAllbyid(userId:number) {
+async function GetAllbyid(userId: number) {
   return prisma.ticket.findFirst({
-    select:{
+    select: {
       id: true,
-      status:true,
+      status: true,
       enrollmentId: true,
       TicketType: {
         select: {
@@ -24,11 +25,26 @@ async function GetAllbyid(userId:number) {
       createdAt: true,
       updatedAt: true,
     },
-    where:{ enrollmentId:userId} 
+    where: { enrollmentId: userId }
   })
 }
 
+async function postTicket(ticket:createTicket) {
+  return prisma.ticket.create({
+    data: ticket
+  })
+}
+
+export type createTicket = {
+    id?: number
+    ticketTypeId: number
+    enrollmentId: number
+    status: TicketStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+}
 export const ticketsRepository = {
-    GetAllTypesTickets,
-    GetAllbyid
+  GetAllTypesTickets,
+  GetAllbyid,
+  postTicket
 };

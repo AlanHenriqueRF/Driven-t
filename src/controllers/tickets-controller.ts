@@ -15,7 +15,17 @@ export async function getTicketsByuser(req: AuthenticatedRequest, res: Response)
 
     const ticketbyuser = await ticketsservice.GetAllbyid(userId);
 
-    
+
 
     return res.status(httpStatus.OK).send(ticketbyuser);
+}
+
+export async function postTicket(req: AuthenticatedRequest, res: Response) {
+    const { ticketTypeId } = req.body;
+    const { userId } = req;
+
+    const ticketCreated = await ticketsservice.postTicket(ticketTypeId,userId);
+
+    return res.status(httpStatus.CREATED).send(ticketCreated)
+
 }
