@@ -1,6 +1,6 @@
-import { CreateTicket } from "@/protocols";
-import Joi from "joi";
+import Joi from 'joi';
+import { CreateTicket } from '@/protocols';
 
 export const createTicket = Joi.object<CreateTicket>({
-    ticketTypeId: Joi.number().required()
-})
+  ticketTypeId: Joi.number().required(),
+});

@@ -11,9 +11,9 @@ export type RequestError = {
   message: string;
 };
 
-export type CreateTicket={
-  ticketTypeId: number 
-}
+export type CreateTicket = {
+  ticketTypeId: number;
+};
 
 export type ViaCEPAddressError = {
   error: boolean;
