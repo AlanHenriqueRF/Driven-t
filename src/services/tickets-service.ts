@@ -22,7 +22,7 @@ async function GetAllbyid(userId: number): Promise<getTicketById> {
 export type getTicketById = {
   id: number;
   status: TicketStatus;
-  ticketTypeId: number,
+  ticketTypeId: number;
   enrollmentId: number;
   createdAt: Date;
   updatedAt: Date;
@@ -40,7 +40,6 @@ export type getTicketById = {
 async function postTicket(ticketTypeId: number, userId: number) {
   const checkEnrrolment = await enrollmentRepository.findWithAddressByUserId(userId);
 
-  if (!ticketTypeId) throw invalidDataError('ticketTypeId was not send');
   if (!checkEnrrolment) throw notFoundError();
 
   const Ticket = {
@@ -49,9 +48,9 @@ async function postTicket(ticketTypeId: number, userId: number) {
     status: TicketStatus.RESERVED,
     updatedAt: new Date().toISOString(),
   };
-  console.log(Ticket.enrollmentId, typeof Ticket.enrollmentId);
-  await ticketsRepository.postTicket(Ticket);
-  return await ticketsRepository.GetAllbyid(userId);
+
+  const result = await ticketsRepository.postTicket(Ticket);
+  return await ticketsRepository.GetAllbyid(result.enrollmentId);
 }
 
 export const ticketsservice = {
