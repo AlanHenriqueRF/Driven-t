@@ -6,7 +6,7 @@ async function GetAllTypesTickets() {
 }
 
 async function GetAllbyid(userId: number) {
-  return prisma.ticket.findFirst({
+  return prisma.ticket.findMany({
     select: {
       id: true,
       status: true,
