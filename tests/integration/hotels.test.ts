@@ -15,7 +15,7 @@ const server = supertest(app);
 
 describe('Get /hotels',()=>{
     it('should respond with status 401 if no token is given', async () => {
-        const response = await server.get('');
+        const response = await server.get('/hotels');
     
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
       });
@@ -23,7 +23,7 @@ describe('Get /hotels',()=>{
       it('should respond with status 401 if given token is not valid', async () => {
         const token = faker.lorem.word();
     
-        const response = await server.get('/enrollments').set('Authorization', `Bearer ${token}`);
+        const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
     
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
       });
@@ -32,7 +32,34 @@ describe('Get /hotels',()=>{
         const userWithoutSession = await createUser();
         const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
     
-        const response = await server.get('/enrollments').set('Authorization', `Bearer ${token}`);
+        const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
+    
+        expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+      });
+
+
+})
+
+describe('Get /hotels:id',()=>{
+    it('should respond with status 401 if no token is given', async () => {
+        const response = await server.get('/hotels/1');
+    
+        expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+      });
+    
+      it('should respond with status 401 if given token is not valid', async () => {
+        const token = faker.lorem.word();
+    
+        const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
+    
+        expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+      });
+    
+      it('should respond with status 401 if there is no session for given token', async () => {
+        const userWithoutSession = await createUser();
+        const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
+    
+        const response = await server.get('/hotels/1').set('Authorization', `Bearer ${token}`);
     
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
       });
