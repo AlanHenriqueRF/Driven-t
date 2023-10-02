@@ -13,7 +13,7 @@ export async function CheckEnrollmentId(req: AuthenticatedRequest, res: Response
     
     const hotels = await hotelsRepository.getAllHotels();
 
-    if (hotels.length === 0) throw notFoundError() 
+    
 
     
     
@@ -31,6 +31,8 @@ export async function CheckEnrollmentId(req: AuthenticatedRequest, res: Response
         /* console.log(ticket)
         console.log('falhou pq não inclui hotel') */
         throw paymentRequired()};
+
+    if (hotels.length === 0) throw notFoundError();
 
     next()
 }

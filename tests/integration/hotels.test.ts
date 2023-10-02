@@ -67,20 +67,6 @@ describe('Get /hotels', () => {
             expect(response.status).toEqual(httpStatus.NOT_FOUND);
         })
 
-        it('Should respond with status 404 when no exist hotels', async () => {
-            const user = await createUser();
-            const token = await generateValidToken(user);
-            const enrollment = await createEnrollmentWithAddress(user);
-            const typeTicket = await createTicketType(false,true)
-            const ticket = await createTicket(enrollment.id,typeTicket.id,'PAID')
-
-            const response = await server
-                .get('/hotels')
-                .set('Authorization', `Bearer ${token}`)
-
-            expect(response.status).toEqual(httpStatus.NOT_FOUND);
-        })
-
         it('Should respond with status 402 when ticket no PAID', async()=>{
             const user = await createUser();
             const token = await generateValidToken(user);
@@ -127,6 +113,20 @@ describe('Get /hotels', () => {
                 .set('Authorization', `Bearer ${token}`)
 
             expect(response.status).toEqual(httpStatus.PAYMENT_REQUIRED);
+        })
+
+        it('Should respond with status 404 when no exist hotels', async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const enrollment = await createEnrollmentWithAddress(user);
+            const typeTicket = await createTicketType(false,true)
+            const ticket = await createTicket(enrollment.id,typeTicket.id,'PAID')
+
+            const response = await server
+                .get('/hotels')
+                .set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toEqual(httpStatus.NOT_FOUND);
         })
 
         it('Should responde with status 200 and a specific array', async()=>{
@@ -207,20 +207,6 @@ describe('Get /hotels:id', () => {
 
             expect(response.status).toEqual(httpStatus.NOT_FOUND);
         })
-
-        it('Should respond with status 404 when no exist hotels', async () => {
-            const user = await createUser();
-            const token = await generateValidToken(user);
-            const enrollment = await createEnrollmentWithAddress(user);
-            const typeTicket = await createTicketType()
-            const ticket = await createTicket(enrollment.id,typeTicket.id,'PAID')
-
-            const response = await server
-                .get('/hotels/1')
-                .set('Authorization', `Bearer ${token}`)
-
-            expect(response.status).toEqual(httpStatus.NOT_FOUND);
-        })
         
         it('Should respond with status 402 when ticket no PAID', async()=>{
             const user = await createUser();
@@ -267,6 +253,20 @@ describe('Get /hotels:id', () => {
                 .set('Authorization', `Bearer ${token}`)
 
             expect(response.status).toEqual(httpStatus.PAYMENT_REQUIRED);
+        })
+
+        it('Should respond with status 404 when no exist hotels', async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const enrollment = await createEnrollmentWithAddress(user);
+            const typeTicket = await createTicketType(false,true);
+            const ticket = await createTicket(enrollment.id,typeTicket.id,'PAID')
+
+            const response = await server
+                .get('/hotels/1')
+                .set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toEqual(httpStatus.NOT_FOUND);
         })
 
         it('Should responde with status 200 and a specific array', async()=>{
