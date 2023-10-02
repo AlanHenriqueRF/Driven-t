@@ -71,7 +71,7 @@ describe('Get /hotels', () => {
             const user = await createUser();
             const token = await generateValidToken(user);
             const enrollment = await createEnrollmentWithAddress(user);
-            const typeTicket = await createTicketType()
+            const typeTicket = await createTicketType(false,true)
             const ticket = await createTicket(enrollment.id,typeTicket.id,'PAID')
 
             const response = await server

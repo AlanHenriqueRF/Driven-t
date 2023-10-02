@@ -15,7 +15,22 @@ export async function CheckEnrollmentId(req: AuthenticatedRequest, res: Response
 
     if (hotels.length === 0) throw notFoundError() 
 
-    if (ticket.status != 'PAID' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel ) throw paymentRequired()
+    
+    
+    if (ticket.status != 'PAID' ){
+        /* console.log(ticket)
+        console.log('falhou no paid') */
+        throw paymentRequired();}
+
+    if (ticket.TicketType.isRemote) {
+        /* console.log(ticket)
+        console.log('falhou pq é remoto') */
+        throw paymentRequired()};
+
+    if (!ticket.TicketType.includesHotel) {
+        /* console.log(ticket)
+        console.log('falhou pq não inclui hotel') */
+        throw paymentRequired()};
 
     next()
 }
