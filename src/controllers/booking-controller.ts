@@ -12,16 +12,15 @@ export async function getBooking(req: AuthenticatedRequest, res: Response) {
 }
 
 export async function createBooking(req: AuthenticatedRequest, res: Response) {
-    const { userId } = req;
-    const { roomId } = req.body;
-    return res.status(httpStatus.OK).send(await bookingService.createBooking(userId,roomId))
+  const { userId } = req;
+  const { roomId } = req.body;
+  return res.status(httpStatus.OK).send(await bookingService.createBooking(userId, roomId))
 
-  /* return res.sendStatus(httpStatus.OK); */
 }
-/* 
-export async function getAddressFromCEP(req: AuthenticatedRequest, res: Response) {
-  const { cep } = req.query as CEP;
 
-  const address = await enrollmentsService.getAddressFromCEP(cep);
-  res.status(httpStatus.OK).send(address);
-} */
+export async function updateBooking(req: AuthenticatedRequest, res: Response) {
+  const {bookingId}  = req.params;
+  const { roomId } = req.body;
+  return res.status(httpStatus.OK).send(await bookingService.updateBooking(Number(bookingId), roomId))
+
+}
