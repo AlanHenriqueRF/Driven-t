@@ -65,7 +65,7 @@ describe('GET /enrollments', () => {
         birthday: enrollment.birthday.toISOString(),
         phone: enrollment.phone,
         address: {
-          id: enrollment.Address[0].id,
+          id: (enrollment.Address)[0].id,
           cep: enrollment.Address[0].cep,
           street: enrollment.Address[0].street,
           city: enrollment.Address[0].city,
