@@ -1,7 +1,5 @@
-import { notFoundError } from '@/errors';
-import { bookingRepository, eventRepository } from '@/repositories';
-import { exclude } from '@/utils/prisma-utils';
-import { Booking } from '@prisma/client';
+import { forbiddenError, notFoundError } from '@/errors';
+import { bookingRepository, roomsRepository} from '@/repositories';
 
 async function getBooking(userId: number) {
   const booking = await bookingRepository.getBooking(userId);
@@ -10,19 +8,20 @@ async function getBooking(userId: number) {
   return booking;
 }
 
-/* export type getBooking = Omit<Booking, 'createdAt' | 'updatedAt'>; */
-/*
-async function isCurrentEventActive(): Promise<boolean> {
-  const event = await eventRepository.findFirst();
-  if (!event) return false;
+async function createBooking(userId:number,roomId:number){
+    const roomExist = await roomsRepository.findRoom(roomId);
+    if (!roomExist ) throw notFoundError();
 
-  const now = dayjs();
-  const eventStartsAt = dayjs(event.startsAt);
-  const eventEndsAt = dayjs(event.endsAt);
+    const capacity = (await bookingRepository.findRoom(roomId));
+    if (capacity.length > roomExist.capacity ) throw forbiddenError();
 
-  return now.isAfter(eventStartsAt) && now.isBefore(eventEndsAt);
-} */
+    const booking = {bookingId: (await bookingRepository.createBooking(userId,roomId)).id};
+
+  return booking
+}
+
 
 export const bookingService = {
-    getBooking
+    getBooking,
+    createBooking
 };

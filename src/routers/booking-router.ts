@@ -1,5 +1,6 @@
-import { getBooking } from "@/controllers";
-import { authenticateToken } from "@/middlewares";
+import { createBooking, getBooking } from "@/controllers";
+import { authenticateToken, validateBody } from "@/middlewares";
+import { bookingSchema } from "@/schemas/booking-schemas";
 import { Router } from "express";
 
 const bookingRouter = Router();
@@ -7,5 +8,6 @@ const bookingRouter = Router();
 bookingRouter
     .all('/*', authenticateToken)
     .get('/', getBooking)
+    .post('/',validateBody(bookingSchema), createBooking)
 
 export {bookingRouter};
