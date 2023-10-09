@@ -2,7 +2,9 @@ import { notFoundError } from "@/errors";
 import { bookingRepository, roomsRepository } from "@/repositories";
 import { bookingService } from "@/services";
 import faker from "@faker-js/faker";
-import { any } from "joi";
+import { any, forbidden } from "joi";
+import { createHotel, createRoomWithHotelId } from "../factories/hotels-factory";
+import { createBooking } from "../factories/booking-factory";
 
 describe('Get booking', () => {
   jest.spyOn(bookingRepository, "getBooking").mockResolvedValueOnce(null);
@@ -27,8 +29,4 @@ describe("Create booking", () => {
     const promise = bookingService.createBooking(booking.userId, booking.roomId)
     expect(promise).rejects.toEqual(notFoundError())
   });
-  /* it("Should throw an error forbidden",async ()=>{
-    jest.spyOn(roomsRepository, "findRoom").mockResolvedValueOnce({id:1,name:'quartinho',capacity:2, createdAt: new Date, updatedAt:new Date});
-
-  }) */
 });
