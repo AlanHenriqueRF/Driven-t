@@ -15,8 +15,7 @@ async function createBooking(userId: number, roomId: number) {
     const capacity = (await bookingRepository.findRoom(roomId));
     const enrollment = (await enrollmentRepository.findWithAddressByUserId(userId)).id
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment)
-    if (capacity.length >= roomExist.capacity || !ticket.TicketType.includesHotel || ticket.TicketType.isRemote) throw forbiddenError();
-    
+    if (capacity.length >= roomExist.capacity || !ticket.TicketType.includesHotel || ticket.TicketType.isRemote || ticket.status!='PAID' ) throw forbiddenError();
 
     const booking = { bookingId: (await bookingRepository.createBooking(userId, roomId)).id };
 
