@@ -248,8 +248,8 @@ describe('PUT /booking/:bookingId', () => {
 
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     });
-    /* describe('Token is valid', () => {
-        it('should respond with status 404 if user no have booking', async () => {
+    describe('Token is valid', () => {
+        it('should respond with status 403 if user no have booking', async () => {
             const user = await createUser();
             const token = await generateValidToken(user);
             const enrollment = await createEnrollmentWithAddress(user);
@@ -257,10 +257,98 @@ describe('PUT /booking/:bookingId', () => {
             const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
             await createPayment(ticket.id, ticketType.price);
             const hotel = await createHotel();
-            const room = await createRoomWithHotelId(hotel.id, 0);
+            const room = await createRoomWithHotelId(hotel.id, 50);
             const body = { roomId: room.id };
+
+            const response = await server
+                .put('/booking/1234')
+                .set('Authorization', `Bearer ${token}`).send(body)
+            
+
+            expect(response.status).toBe(httpStatus.FORBIDDEN)
         });
-    }) */
+        it('should respond with status 404 if user no have room', async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const enrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createTicketType(false, true);
+            const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+            await createPayment(ticket.id, ticketType.price);
+            const hotel = await createHotel();
+            const room = await createRoomWithHotelId(hotel.id, 50);
+            const booking = await createBooking((await createUser()).id, (await createRoomWithHotelId(hotel.id, 50)).id);
+
+            const body = { roomId: 1245};
+
+            const response = await server
+                .put('/booking/1')
+                .set('Authorization', `Bearer ${token}`).send(body)
+            
+
+            expect(response.status).toBe(httpStatus.NOT_FOUND)
+        });
+        it('should respond with status 403 ', async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const enrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createTicketType(false, true);
+            const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+            await createPayment(ticket.id, ticketType.price);
+            const hotel = await createHotel();
+            const room = await createRoomWithHotelId(hotel.id, 50);
+            const booking = await createBooking((await createUser()).id, (await createRoomWithHotelId(hotel.id, 50)).id);
+
+            const body = { roomId: room.id};
+
+            const response = await server
+                .put('/booking/1')
+                .set('Authorization', `Bearer ${token}`).send(body)
+            
+
+            expect(response.status).toBe(httpStatus.FORBIDDEN)
+        });
+        it('should respond with status 403', async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const enrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createTicketType(false, true);
+            const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+            await createPayment(ticket.id, ticketType.price);
+            const hotel = await createHotel();
+            const room = await createRoomWithHotelId(hotel.id, 1);
+            const booking = await createBooking((await createUser()).id, room.id);
+
+            const body = { roomId: room.id };
+
+            const response = await server
+                .put('/booking/1')
+                .set('Authorization', `Bearer ${token}`).send(body)
+            
+            expect(response.status).toBe(httpStatus.FORBIDDEN)
+        });
+
+        it('should respond with status 200 with the reponse correctly', async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const enrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createTicketType(false, true);
+            const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+            await createPayment(ticket.id, ticketType.price);
+            const hotel = await createHotel();
+            const room = await createRoomWithHotelId(hotel.id, 2);
+            const booking = await createBooking((await createUser()).id, room.id);
+            const body = { roomId: room.id };
+
+            const response = await server
+                .put(`/booking/${booking.id}`)
+                .set('Authorization', `Bearer ${token}`).send(body)
+            
+            expect(response.status).toBe(httpStatus.OK)
+            expect(response.body).toEqual({
+                bookingId: booking.id,
+            })
+        });
+    })
 
 })
 
